@@ -27,7 +27,7 @@ exports.sourceNodes = async ({ boundActionCreators }, {
     // Initialize a Directus SDK client
     const directusClient = new Directus(_apiKey, _url, _version);
 
-    client.getTables({}, (err, res) => {
+    directusClient.getTables({}, (err, res) => {
         console.log('err', err);
         console.log('res', res);
     });

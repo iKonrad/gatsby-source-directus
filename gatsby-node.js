@@ -1,12 +1,8 @@
 'use strict';
 
-var _directusSdkJavascript = require('directus-sdk-javascript');
-
-var _directusSdkJavascript2 = _interopRequireDefault(_directusSdkJavascript);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+var Directus = require('directus-sdk-javascript');
 
 var _url = '';
 var _apiKey = '';
@@ -40,7 +36,7 @@ exports.sourceNodes = function () {
                         _version = version !== undefined && version !== '' ? version : _version;
 
                         // Initialize a Directus SDK client
-                        directusClient = new _directusSdkJavascript2.default(_apiKey, _url, _version);
+                        directusClient = new Directus(_apiKey, _url, _version);
 
 
                         directusClient.getTables({}, function (err, res) {

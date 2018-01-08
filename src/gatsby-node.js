@@ -1,4 +1,4 @@
-import Directus from 'directus-sdk-javascript';
+const Directus = require('directus-sdk-javascript');
 
 let _url = '';
 let _apiKey = '';

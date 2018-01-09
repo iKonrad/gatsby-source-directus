@@ -6,11 +6,10 @@ let _apiKey = '';
 let _version = '1.1';
 
 exports.sourceNodes = async ({ boundActionCreators }, {
-    directusUrl,
+    url,
     protocol,
     apiKey,
     version,
-    auth,
 }) => {
     const { createNode } = boundActionCreators;
 
@@ -18,13 +17,13 @@ exports.sourceNodes = async ({ boundActionCreators }, {
     protocol = protocol + "://";
 
     // Trim any trailing slashes from the URL
-    directusUrl = directusUrl.replace(/\/$/, "");
+    url = url.replace(/\/$/, "");
 
     // Assign the version
     _version = version !== undefined && version !== '' ? version : _version;
 
     // Merge the URL with a protocol
-    _url = protocol + directusUrl + `/api/${ version }/`;
+    _url = protocol + url + `/api/${ version }/`;
 
     // Assign the API key
     _apiKey = apiKey;

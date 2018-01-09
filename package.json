@@ -3,10 +3,17 @@
   "version": "0.0.3",
   "description": "Source plugin for Gatsby to fetch data from Directus Headless CMS",
   "main": "gatsby-node.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iKonrad/gatsby-source-directus.git"
+  },
   "scripts": {
     "build": "babel src --out-dir . --ignore __tests__",
     "watch": "babel -w src --out-dir . --ignore __tests__",
     "prepare": "cross-env NODE_ENV=production npm run build"
+  },
+  "bugs": {
+    "url": "https://github.com/iKonrad/gatsby-source-directus/issues"
   },
   "author": "Konrad Jarosinski <konrad@jarosinski.uk>",
   "license": "MIT",

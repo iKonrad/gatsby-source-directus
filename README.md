@@ -26,7 +26,7 @@ module.exports = {
   },
   plugins: [
     {
-      resolve: `gatsby-source-wordpress`,
+      resolve: `gatsby-source-directus`,
       options: {
         /*
         * The base URL of Directus without the trailing slash. 

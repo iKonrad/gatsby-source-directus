@@ -46,7 +46,6 @@ exports.sourceNodes = async ({ boundActionCreators }, {
         const tableNode = TableNode(obj);
         createNode(tableNode);
         let tableItems = await fetcher.getAllItemsForTable(obj.name);
-
         console.log(`\n-> Fetched ${tableItems.length} items for '${ obj.name }' table...`)
 
         if (tableItems.length > 0) {

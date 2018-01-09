@@ -17,11 +17,10 @@ var _version = '1.1';
 exports.sourceNodes = function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(_ref, _ref2) {
         var boundActionCreators = _ref.boundActionCreators;
-        var directusUrl = _ref2.directusUrl,
+        var url = _ref2.url,
             protocol = _ref2.protocol,
             apiKey = _ref2.apiKey,
-            version = _ref2.version,
-            auth = _ref2.auth;
+            version = _ref2.version;
         var createNode, fetcher, allTablesData, items;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
             while (1) {
@@ -34,13 +33,13 @@ exports.sourceNodes = function () {
                         protocol = protocol + "://";
 
                         // Trim any trailing slashes from the URL
-                        directusUrl = directusUrl.replace(/\/$/, "");
+                        url = url.replace(/\/$/, "");
 
                         // Assign the version
                         _version = version !== undefined && version !== '' ? version : _version;
 
                         // Merge the URL with a protocol
-                        _url = protocol + directusUrl + ('/api/' + version + '/');
+                        _url = protocol + url + ('/api/' + version + '/');
 
                         // Assign the API key
                         _apiKey = apiKey;

@@ -71,4 +71,3 @@ I'm planning to extend the plugin to include:
 ## Contributions
 
 Feel free to contribute if you feel something's missing. 
-Just clone the repo, and when you're done with changes, make sure to run `npm run build` to transpile the code to ES5.

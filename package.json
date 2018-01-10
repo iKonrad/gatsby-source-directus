@@ -10,7 +10,7 @@
   "scripts": {
     "build": "babel src --out-dir . --ignore __tests__",
     "watch": "babel -w src --out-dir . --ignore __tests__",
-    "prepare": "cross-env NODE_ENV=production npm run build"
+    "install": "cross-env NODE_ENV=production npm run build"
   },
   "bugs": {
     "url": "https://github.com/iKonrad/gatsby-source-directus/issues"

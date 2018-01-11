@@ -1,5 +1,5 @@
 import { RemoteInstance as Directus } from 'directus-sdk-javascript';
-
+import Colors from 'colors';
 
 export default class DirectusFetcher {
     constructor(apiKey, url, version) {
@@ -21,7 +21,7 @@ export default class DirectusFetcher {
 
         // Iterate through the tables and pull the data for each
         if (tablesData.data === undefined) {
-            console.error("An error occurred while fetching the table list.", tablesData);
+            console.error(`\ngatsby-source-directus`.blue, 'error'.red, `gatsby-source-directus: An error occurred while fetching the table list.`, tablesData);
             return;
         }
 

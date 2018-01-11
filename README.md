@@ -9,14 +9,14 @@ Source plugin for pulling data into [Gatsby](https://github.com/gatsbyjs) from
 
 This plugin pulls all your custom tables and creates Gatsby nodes for it.
 
-For example, if you have a `Posts` table, you'll get access to `AllDirectusPosts` and `directusPosts` queries which return values for the predefined fields for that column.
+For example, if you have a `Posts` table, you'll get access to `AllDirectusPost` and `directusPost` queries which return values for the predefined fields for that column.
 
 It works well with Gatsby's `createPages` function if you want to dynamically create Blog posts from Directus, for instance.
 
 ## Installation Guide
 
 - [Install Gatsby](https://www.gatsbyjs.org/docs/)
-- Install plugin with NPM `npm i gatsby-source-directus -S`
+- Install plugin by running npm `npm i gatsby-source-directus -S`
 - Configure the plugin in `gatsby-config.js` file:
 
 ```javascript
@@ -41,11 +41,16 @@ module.exports = {
         /*
          * Directus API key. You can find it on the bottom of your account settings page.
          */
-        apiKey: '123456789',
+        apiKey: '123456789',   
         /*
-         * Directus API version. Defaults to 1.1
+         * This plugin will automatically transform plural table names into their singular counterparts.
+         * However, if the name generated isn't correct, you can overwrite it by setting the nameExceptions object
+         * So, on the example below, a table "Posts", will be transformed to "Article" node type.
+         * This config is optional
          */
-        version: '1.1',
+        nameExceptions: {
+            posts: "Article",
+        }
       },
     }
   ],
@@ -56,9 +61,12 @@ module.exports = {
 
 For every table in Directus, the plugin will create a separate node with `Directus` prefix.
 
-So, for your `posts` and `categories` tables, the queries would be `directusPosts`, `allDirectusPosts` and `directusCategories`, `allDirectusCategories`.
+So, for your `posts` and `categories` tables, the queries would be `directusPost`, `allDirectusPost` and `directusCategory`, `allDirectusCategory`.
 
 An example with Gatby's `createPages` coming soon.
+
+**This plugin is using [Pluralize](https://github.com/blakeembrey/pluralize) module to transform plural table names into singular node types to conform to the Gatsby naming convention.**
+If for some reason, the generated name doesn't seem right, you can overwrite the node name using the `nameExceptions` object in the plugin config. (see example above)
 
 ## To do
 

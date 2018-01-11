@@ -1,5 +1,5 @@
 import Fetcher from './fetch';
-import { TableNode, createTableItemFactory } from './process';
+import { TableNode, createTableItemFactory, getNodeTypeNameForTable } from './process';
 
 let _url = '';
 let _apiKey = '';
@@ -10,6 +10,7 @@ exports.sourceNodes = async ({ boundActionCreators }, {
     protocol,
     apiKey,
     version,
+    nameExceptions
 }) => {
     const { createNode } = boundActionCreators;
 
@@ -38,7 +39,7 @@ exports.sourceNodes = async ({ boundActionCreators }, {
 
     let items = [];
 
-    console.log(`Fetched ${allTablesData.length} tables from Directus.`)
+    console.log(`\nFetched ${allTablesData.length} tables from Directus.`)
 
 
     // Iterate through all table items
@@ -48,26 +49,25 @@ exports.sourceNodes = async ({ boundActionCreators }, {
         let tableItems = await fetcher.getAllItemsForTable(obj.name);
         console.log(`\n-> Fetched ${tableItems.length} items for '${ obj.name }' table...`)
 
-        if (tableItems.length > 0) {
-            // Get all the items for the table above and create a gatsby node for it
-            await Promise.all(Object.keys(tableItems).map(async (itemKey) => {
-                const tableItemData = tableItems[itemKey];
+        // Get the name for this node type
+        let name = getNodeTypeNameForTable(obj.name, nameExceptions);
+        console.log(`\n-> Generating Directus${name} node type...`);
 
-                let name = obj.name.charAt(0).toUpperCase() + obj.name.slice(1);
+        // Get all the items for the table above and create a gatsby node for it
+        await Promise.all(Object.keys(tableItems).map(async (itemKey) => {
+            const tableItemData = tableItems[itemKey];
 
-                // We're creating a separate Item Type for every table
-                let ItemNode = createTableItemFactory(name);
+            // We're creating a separate Item Type for every table
+            let ItemNode = createTableItemFactory(name);
 
-                // Create a Table Item node based on the API response
-                const tableItemNode = ItemNode(tableItemData, {
-                    parent: tableNode.id,
-                });
+            // Create a Table Item node based on the API response
+            const tableItemNode = ItemNode(tableItemData, {
+                parent: tableNode.id,
+            });
 
-                // Pass it to Gatsby to create a node
-                createNode(tableItemNode);
-            }))
-        }
-
+            // Pass it to Gatsby to create a node
+            createNode(tableItemNode);
+        }))
     }));
 
     // // Process data into nodes.

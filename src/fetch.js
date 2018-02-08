@@ -9,9 +9,7 @@ export default class DirectusFetcher {
         // Initialize client
         this.client = new Directus({
             url: this.url,
-            headers: {
-                Authorization: `Bearer ${this.apiKey}`,
-            }
+            accessToken: this.apiKey
         });
     }
 

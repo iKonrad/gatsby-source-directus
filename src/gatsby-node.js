@@ -25,7 +25,7 @@ exports.sourceNodes = async ({ boundActionCreators }, {
     _version = version !== undefined && version !== '' ? version : _version;
 
     // Merge the URL with a protocol
-    _url = protocol + url + `/api/${ version }/`;
+    _url = protocol + url + `/api/${ _version }/`;
 
     // Assign the API key
     _apiKey = apiKey;

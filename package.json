@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-directus",
-  "version": "0.0.41",
+  "version": "0.0.411",
   "description": "Source plugin for Gatsby to fetch data from Directus Headless CMS",
   "main": "gatsby-node.js",
   "repository": {

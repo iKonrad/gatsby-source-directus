@@ -2,10 +2,11 @@ import { RemoteInstance as Directus } from 'directus-sdk-javascript';
 import Colors from 'colors';
 
 export default class DirectusFetcher {
-    constructor(apiKey, url, version) {
+    constructor(apiKey, url, version, requestParams) {
         this.apiKey = apiKey;
         this.url = url;
         this.version = version;
+        this.requestParams = requestParams;
         // Initialize client
         this.client = new Directus({
             url: this.url,
@@ -35,7 +36,7 @@ export default class DirectusFetcher {
     }
 
     async getAllItemsForTable(name) {
-        const records = await this.client.getItems(name);
+        const records = await this.client.getItems(name, this.requestParams);
         return records.data;
     }
 }

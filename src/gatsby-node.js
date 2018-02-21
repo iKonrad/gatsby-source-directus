@@ -5,13 +5,17 @@ import Colors from 'colors';
 let _url = '';
 let _apiKey = '';
 let _version = '1.1';
+let _requestParams = {
+    depth: 1,
+}
 
 exports.sourceNodes = async ({ boundActionCreators }, {
     url,
     protocol,
     apiKey,
     version,
-    nameExceptions
+    nameExceptions,
+    requestParams,
 }) => {
     const { createNode } = boundActionCreators;
 
@@ -30,8 +34,12 @@ exports.sourceNodes = async ({ boundActionCreators }, {
     // Assign the API key
     _apiKey = apiKey;
 
+    // Set request parameters
+    _requestParams = requestParams || _requestParams;
+
     // Initialize the Fetcher class with API key and URL
-    const fetcher = new Fetcher(_apiKey, _url, _version);
+    const fetcher = new Fetcher(_apiKey, _url, _version, _requestParams);
+
     console.log(`gatsby-source-directus`.cyan, 'Fetching Directus tables data...');
 
     // Fetch all the tables with data from Directus in a raw format

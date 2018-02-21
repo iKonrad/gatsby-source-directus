@@ -44,15 +44,22 @@ module.exports = {
         apiKey: '123456789',   
         /*
          * This plugin will automatically transform plural table names into their singular counterparts.
-         * However, if the name generated isn't correct, you can overwrite it by setting the nameExceptions object
+         * However, if the name generated isn't correct, you can overwrite it by setting the `nameExceptions` object.
          * So, on the example below, a table "Posts", will be transformed to "Article" node type.
          * This config is optional
          */
         nameExceptions: {
-            posts: "Article",
-        }
+          posts: "Article",
+        },
+        /*
+         * This plugin will call the Directus API with the default request parameters.
+         * In case you want to override these, you can pass in a `requestParams` object.
+         */
+        requestParams: {
+          depth: 2,
+        },
       },
-    }
+    },
   ],
 }
 ```
@@ -63,10 +70,63 @@ For every table in Directus, the plugin will create a separate node with `Direct
 
 So, for your `posts` and `categories` tables, the queries would be `directusPost`, `allDirectusPost` and `directusCategory`, `allDirectusCategory`.
 
-An example with Gatby's `createPages` coming soon.
-
 **This plugin is using [Pluralize](https://github.com/blakeembrey/pluralize) module to transform plural table names into singular node types to conform to the Gatsby naming convention.**
 If for some reason, the generated name doesn't seem right, you can overwrite the node name using the `nameExceptions` object in the plugin config. (see example above)
+
+### Example plugin with Gatsby's `createPages`
+
+```javascript
+const path = require('path')
+
+exports.createPages = ({ boundActionCreators, graphql }, { urlPrefix }) => {
+  const { createPage } = boundActionCreators
+
+  return new Promise((resolve, reject) => {
+    resolve(
+      graphql(
+        `
+          {
+            allDirectusPost {
+              edges {
+                node {
+                  id
+                  title
+                  author
+                  content
+                }
+              }
+            }
+          }
+        `
+      ).then(result => {
+        if (result.errors) {
+          console.error('GraphQL query returned errors')
+          reject(result.errors)
+        }
+
+        result.data.allDirectusPost.edges.forEach(edge => {
+          try {
+            let node = edge.node
+            let path = `posts/${node.id}`
+            createPage({
+              path,
+              layout: 'index',
+              component: path.resolve('src/templates/post.jsx'),
+              context: {
+                post: node,
+              },
+            })
+            console.log(`Generated page '${path}'`)
+          }
+          catch (error) {
+            console.error(`Failed to generate page posts/'${path}': ${error}`)
+          }
+        })
+      })
+    )
+  })
+}
+```
 
 ## To do
 

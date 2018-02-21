@@ -74,6 +74,8 @@ So, for your `posts` and `categories` tables, the queries would be `directusPost
 If for some reason, the generated name doesn't seem right, you can overwrite the node name using the `nameExceptions` object in the plugin config. (see example above)
 
 ### Example plugin with Gatsby's `createPages`
+This example assumes that you have created a `posts` table in Directus with `title`, `author` and `content` fields.
+It will use `src/templates/post.jsx` file as your template file.
 
 ```javascript
 const path = require('path')

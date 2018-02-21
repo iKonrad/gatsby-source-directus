@@ -30,6 +30,7 @@ const sanitizeDirectusFields = (node) => {
     delete node.display_template;
     delete node.filter_column_blacklist;
     delete node.preferences;
+    delete node.columns;
     return node;
 }
 

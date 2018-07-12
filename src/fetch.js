@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import { RemoteInstance as Directus } from 'directus-sdk-javascript';
 import Colors from 'colors';
 

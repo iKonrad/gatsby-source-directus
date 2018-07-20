@@ -89,14 +89,18 @@ exports.sourceNodes = async ({ boundActionCreators, getNode, store, cache, creat
         }
     }
 
+    console.log(`gatsby-source-directus`.cyan, 'Fetching Directus files data...');
+
     const allFilesData = await fetcher.getAllFiles();
 
     console.log(`gatsby-source-directus`.blue, 'success'.green, `Fetched`, allFilesData.length.toString().yellow, `files from Directus.`);
+    console.log(`gatsby-source-directus`.cyan, 'Downloading Directus files...');
+
+    let filesDownloaded = 0;
 
     for (let fileData of allFilesData) {
         const fileNode = FileNode(fileData);
         let localFileNode
-        console.log(protocol + url + fileNode.url);
 
         try {
             localFileNode = await createRemoteFileNode({
@@ -112,10 +116,17 @@ exports.sourceNodes = async ({ boundActionCreators, getNode, store, cache, creat
         }
 
         if (localFileNode) {
+            filesDownloaded++;
             fileNode.localFile___NODE = localFileNode.id;
         }
 
         await createNode(fileNode);
+    }
+
+    if (filesDownloaded === allFilesData.length) {
+        console.log(`gatsby-source-directus`.blue, 'success'.green, `Downloaded all`, filesDownloaded.toString().yellow, `files from Directus.`);
+    } else {
+        console.log(`gatsby-source-directus`.blue, `warning`.yellow, `skipped`, (filesDownloaded - allFilesData.length).toString().yellow, 'files from downloading');
     }
 
     console.log("AFTER");

@@ -10,6 +10,7 @@ const {
 })
 
 const TABLE_NODE_TYPE = `Table`
+const FILE_NODE_TYPE = `File`
 
 /*
  *  Removes unnecessary fields from the response
@@ -31,10 +32,17 @@ const sanitizeDirectusFields = (node) => {
     delete node.filter_column_blacklist;
     delete node.preferences;
     delete node.columns;
+    delete node.storage_adapter;
+    delete node.thumbnail_url;
+    delete node.old_thumbnail_url;
     return node;
 }
 
 export const TableNode = createNodeFactory(TABLE_NODE_TYPE, node => {
+    return sanitizeDirectusFields(node);
+});
+
+export const FileNode = createNodeFactory(FILE_NODE_TYPE, node => {
     return sanitizeDirectusFields(node);
 });
 

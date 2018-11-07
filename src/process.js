@@ -1,6 +1,5 @@
 import createNodeHelpers from 'gatsby-node-helpers'
 import Pluralize from 'pluralize';
-import path from 'path'
 
 const {
     createNodeFactory
@@ -57,14 +56,7 @@ export const createTableItemFactory = (name, allFiles) => {
                 const name = node[key].data && node[key].data.name
                 const file = allFiles.find(file => file.directus.name === name)
                 if (file) {
-                    const gatsbyFile = file.gatsby
-                    const filename = `${gatsbyFile.name}-${gatsbyFile.internal.contentDigest}${gatsbyFile.ext}`
-                    // This might not work if the site has a basePath set. It is relative to the domain root.
-                    const publicPath = path.join(
-                        `/static`,
-                        filename
-                    )
-                    node[key].url = publicPath
+                    node[key].file___NODE = file.gatsby.id
                 }
             }
         })

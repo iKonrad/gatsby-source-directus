@@ -1,7 +1,10 @@
 import Fetcher from './fetch';
 import { TableNode, FileNode, createTableItemFactory, getNodeTypeNameForTable } from './process';
 import Colors from 'colors';
+import fs from 'fs-extra'
+import path from 'path'
 import { createRemoteFileNode } from 'gatsby-source-filesystem'
+import { GraphQLString } from 'gatsby/graphql'
 
 let _url = '';
 let _apiKey = '';
@@ -74,6 +77,20 @@ exports.sourceNodes = async ({ boundActionCreators, getNode, store, cache, creat
             createNodeId,
             auth: _auth,
             })
+
+            // Move file to semantic name, within hash folder
+            let semanticName = (fileNode.title || localFileNode.name).replace(/[^a-z0-9]/gi, '_')
+            let newAbsolutePath = path.join(localFileNode.dir, semanticName + localFileNode.ext)
+            await fs.move(localFileNode.absolutePath, newAbsolutePath, {
+                overwrite: true
+            })
+
+            // Rewrite the gatsby-source-filesystem "File" node to reflect the new path
+            localFileNode.absolutePath = newAbsolutePath
+            localFileNode.base = semanticName + localFileNode.ext
+            localFileNode.name = semanticName
+            localFileNode.relativeDirectory = path.relative(process.cwd(), localFileNode.dir)
+            localFileNode.relativePath = path.join(localFileNode.relativeDirectory, localFileNode.base)
         } catch (e) {
             console.error(`\ngatsby-source-directus`.blue, 'error'.red, `gatsby-source-directus: An error occurred while downloading the files.`, e);
         }
@@ -145,3 +162,38 @@ exports.sourceNodes = async ({ boundActionCreators, getNode, store, cache, creat
 
     console.log("AFTER");
 };
+
+// This is mostly copied from `gatsby-source-filesystem. However, it removes the hash from the filename,
+// since it's guaranteed that the file is alone in its directory with gatsby-source-filesystem v2.0.12
+exports.setFieldsOnGraphQLNodeType = ({
+    type,
+    getNodeAndSavePathDependency,
+    pathPrefix = ``
+  }) => {
+    if (type.name !== `File`) {
+      return {};
+    }
+
+    return {
+      publicURL: {
+        type: GraphQLString,
+        args: {},
+        description: `Copy file to static directory and return public url to it`,
+        resolve: (file, fieldArgs, context) => {
+          const details = getNodeAndSavePathDependency(file.id, context.path);
+          const fileName = `${file.name}${details.ext}`;
+          const publicPath = path.join(process.cwd(), `public`, `static`, file.internal.contentDigest, fileName);
+
+          if (!fs.existsSync(publicPath)) {
+            fs.copy(details.absolutePath, publicPath, err => {
+              if (err) {
+                console.error(`error copying file from ${details.absolutePath} to ${publicPath}`, err);
+              }
+            });
+          }
+
+          return `${pathPrefix}/static/${file.internal.contentDigest}/${fileName}`;
+        }
+      }
+    };
+  };

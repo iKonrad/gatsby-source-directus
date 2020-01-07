@@ -1,3 +1,5 @@
+** NOTE: ** this plugin is no longer maintained. Please consider using this [official plugin](https://github.com/directus/gatsby-source) instead.
+
 # gatsby-source-directus
 [![Build Status](https://travis-ci.org/iKonrad/gatsby-source-directus.svg?branch=master)](https://travis-ci.org/iKonrad/gatsby-source-directus)
 

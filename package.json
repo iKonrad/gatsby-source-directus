@@ -3,6 +3,12 @@
   "version": "0.0.44",
   "description": "Source plugin for Gatsby to fetch data from Directus Headless CMS",
   "main": "gatsby-node.js",
+  "files": [
+    "index.js",
+    "fetch.js",
+    "gatsby-node.js",
+    "process.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/iKonrad/gatsby-source-directus.git"

@@ -51,6 +51,7 @@ exports.sourceNodes = async ({ actions, getNode, store, cache, createNodeId }, {
     // Initialize the Fetcher class with API key and URL
     const fetcher = new Fetcher(_apiKey, _url, _version, _requestParams, _fileRequestParams);
 
+    /*
     console.log(`gatsby-source-directus`.cyan, 'Fetching Directus files data...');
 
     const allFilesData = await fetcher.getAllFiles();
@@ -105,6 +106,8 @@ exports.sourceNodes = async ({ actions, getNode, store, cache, createNodeId }, {
     } else {
         console.log(`gatsby-source-directus`.blue, `warning`.yellow, `skipped`, (filesDownloaded - allFilesData.length).toString().yellow, 'files from downloading');
     }
+
+    */
 
     console.log(`gatsby-source-directus`.cyan, 'Fetching Directus tables data...');
 

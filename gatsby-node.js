@@ -41,7 +41,7 @@ exports.sourceNodes = function () {
             fileRequestParams = _ref2.fileRequestParams,
             auth = _ref2.auth;
 
-        var createNode, fetcher, allTablesData, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, tableData, tableNode, tableItems, name, ItemNode, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, tableItemData, tableItemNode;
+        var createNode, fetcher, allFilesData, filesDownloaded, allFiles, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, fileData, fileNode, localFileNode, allTablesData, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, tableData, tableNode, tableItems, name, ItemNode, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, tableItemData, tableItemNode;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
@@ -77,88 +77,162 @@ exports.sourceNodes = function () {
                         // Initialize the Fetcher class with API key and URL
                         fetcher = new _fetch2.default(_apiKey, _url, _version, _requestParams, _fileRequestParams);
 
-                        /*
-                        console.log(`gatsby-source-directus`.cyan, 'Fetching Directus files data...');
-                         const allFilesData = await fetcher.getAllFiles();
-                         console.log(`gatsby-source-directus`.blue, 'success'.green, `Fetched`, allFilesData.length.toString().yellow, `files from Directus.`);
-                        console.log(`gatsby-source-directus`.cyan, 'Downloading Directus files...');
-                         let filesDownloaded = 0,
-                            allFiles = [];
-                         for (let fileData of allFilesData) {
-                            const fileNode = FileNode(fileData);
-                            let localFileNode
-                             try {
-                                localFileNode = await createRemoteFileNode({
-                                url: encodeURI(`https:${fileNode.url}`),
-                                store,
-                                cache,
-                                createNode,
-                                createNodeId,
-                                auth: _auth,
-                                })
-                            } catch (e) {
-                                console.error(`\ngatsby-source-directus`.blue, 'error'.red, `gatsby-source-directus: An error occurred while downloading the files.`, e);
-                            }
-                             if (localFileNode) {
-                                filesDownloaded++;
-                                fileNode.localFile___NODE = localFileNode.id;
-                                 // When `gatsby-source-filesystem` creates the file nodes, all reference
-                                // to the original data source is wiped out. This object links the
-                                // directus reference (that's used by other objects to reference files)
-                                // to the gatsby reference (that's accessible in GraphQL queries). Then,
-                                // when each table row is created (in ./process.js), if a file is on a row
-                                // we find it in this array and put the Gatsby URL on the directus node.
-                                //
-                                // This is a hacky solution, but it does the trick for very basic raw file capture
-                                // TODO see if we can implement gatsby-transformer-sharp style queries
-                                allFiles.push({
-                                    directus: fileNode,
-                                    gatsby: localFileNode
-                                });
-                            }
-                             await createNode(fileNode);
+
+                        console.log('gatsby-source-directus'.cyan, 'Fetching Directus files data...');
+
+                        _context.next = 14;
+                        return fetcher.getAllFiles();
+
+                    case 14:
+                        allFilesData = _context.sent;
+
+
+                        console.log('gatsby-source-directus'.blue, 'success'.green, 'Fetched', allFilesData.length.toString().yellow, 'files from Directus.');
+                        console.log('gatsby-source-directus'.cyan, 'Downloading Directus files...');
+
+                        filesDownloaded = 0, allFiles = [];
+                        _iteratorNormalCompletion = true;
+                        _didIteratorError = false;
+                        _iteratorError = undefined;
+                        _context.prev = 21;
+                        _iterator = allFilesData[Symbol.iterator]();
+
+                    case 23:
+                        if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+                            _context.next = 42;
+                            break;
                         }
-                         if (filesDownloaded === allFilesData.length) {
-                            console.log(`gatsby-source-directus`.blue, 'success'.green, `Downloaded all`, filesDownloaded.toString().yellow, `files from Directus.`);
+
+                        fileData = _step.value;
+                        fileNode = (0, _process.FileNode)(fileData);
+                        localFileNode = void 0;
+                        _context.prev = 27;
+                        _context.next = 30;
+                        return (0, _gatsbySourceFilesystem.createRemoteFileNode)({
+                            url: encodeURI('https:' + fileNode.url),
+                            store: store,
+                            cache: cache,
+                            createNode: createNode,
+                            createNodeId: createNodeId,
+                            auth: _auth
+                        });
+
+                    case 30:
+                        localFileNode = _context.sent;
+                        _context.next = 36;
+                        break;
+
+                    case 33:
+                        _context.prev = 33;
+                        _context.t0 = _context['catch'](27);
+
+                        console.error('\ngatsby-source-directus'.blue, 'error'.red, 'gatsby-source-directus: An error occurred while downloading the files.', _context.t0);
+
+                    case 36:
+
+                        if (localFileNode) {
+                            filesDownloaded++;
+                            fileNode.localFile___NODE = localFileNode.id;
+
+                            // When `gatsby-source-filesystem` creates the file nodes, all reference
+                            // to the original data source is wiped out. This object links the
+                            // directus reference (that's used by other objects to reference files)
+                            // to the gatsby reference (that's accessible in GraphQL queries). Then,
+                            // when each table row is created (in ./process.js), if a file is on a row
+                            // we find it in this array and put the Gatsby URL on the directus node.
+                            //
+                            // This is a hacky solution, but it does the trick for very basic raw file capture
+                            // TODO see if we can implement gatsby-transformer-sharp style queries
+                            allFiles.push({
+                                directus: fileNode,
+                                gatsby: localFileNode
+                            });
+                        }
+
+                        _context.next = 39;
+                        return createNode(fileNode);
+
+                    case 39:
+                        _iteratorNormalCompletion = true;
+                        _context.next = 23;
+                        break;
+
+                    case 42:
+                        _context.next = 48;
+                        break;
+
+                    case 44:
+                        _context.prev = 44;
+                        _context.t1 = _context['catch'](21);
+                        _didIteratorError = true;
+                        _iteratorError = _context.t1;
+
+                    case 48:
+                        _context.prev = 48;
+                        _context.prev = 49;
+
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+
+                    case 51:
+                        _context.prev = 51;
+
+                        if (!_didIteratorError) {
+                            _context.next = 54;
+                            break;
+                        }
+
+                        throw _iteratorError;
+
+                    case 54:
+                        return _context.finish(51);
+
+                    case 55:
+                        return _context.finish(48);
+
+                    case 56:
+
+                        if (filesDownloaded === allFilesData.length) {
+                            console.log('gatsby-source-directus'.blue, 'success'.green, 'Downloaded all', filesDownloaded.toString().yellow, 'files from Directus.');
                         } else {
-                            console.log(`gatsby-source-directus`.blue, `warning`.yellow, `skipped`, (filesDownloaded - allFilesData.length).toString().yellow, 'files from downloading');
+                            console.log('gatsby-source-directus'.blue, 'warning'.yellow, 'skipped', (filesDownloaded - allFilesData.length).toString().yellow, 'files from downloading');
                         }
-                         */
 
                         console.log('gatsby-source-directus'.cyan, 'Fetching Directus tables data...');
 
                         // Fetch all the tables with data from Directus in a raw format
-                        _context.next = 14;
+                        _context.next = 60;
                         return fetcher.getAllTablesData();
 
-                    case 14:
+                    case 60:
                         allTablesData = _context.sent;
 
 
                         console.log('gatsby-source-directus'.blue, 'success'.green, 'Fetched', allTablesData.length.toString().yellow, 'tables from Directus.');
 
-                        _iteratorNormalCompletion = true;
-                        _didIteratorError = false;
-                        _iteratorError = undefined;
-                        _context.prev = 19;
-                        _iterator = allTablesData[Symbol.iterator]();
+                        _iteratorNormalCompletion2 = true;
+                        _didIteratorError2 = false;
+                        _iteratorError2 = undefined;
+                        _context.prev = 65;
+                        _iterator2 = allTablesData[Symbol.iterator]();
 
-                    case 21:
-                        if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                            _context.next = 68;
+                    case 67:
+                        if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
+                            _context.next = 114;
                             break;
                         }
 
-                        tableData = _step.value;
+                        tableData = _step2.value;
                         tableNode = (0, _process.TableNode)(tableData);
-                        _context.next = 26;
+                        _context.next = 72;
                         return createNode(tableNode);
 
-                    case 26:
-                        _context.next = 28;
+                    case 72:
+                        _context.next = 74;
                         return fetcher.getAllItemsForTable(tableData.name);
 
-                    case 28:
+                    case 74:
                         tableItems = _context.sent;
 
                         console.log('gatsby-source-directus'.blue, 'success'.green, 'Fetched', tableItems.length.toString().cyan, 'items for ', tableData.name.cyan, ' table...');
@@ -172,24 +246,24 @@ exports.sourceNodes = function () {
                         ItemNode = (0, _process.createTableItemFactory)(name, allFiles);
 
                         if (!(tableItems && tableItems.length > 0)) {
-                            _context.next = 64;
+                            _context.next = 110;
                             break;
                         }
 
                         // Get all the items for the table above and create a gatsby node for it
-                        _iteratorNormalCompletion2 = true;
-                        _didIteratorError2 = false;
-                        _iteratorError2 = undefined;
-                        _context.prev = 37;
-                        _iterator2 = tableItems[Symbol.iterator]();
+                        _iteratorNormalCompletion3 = true;
+                        _didIteratorError3 = false;
+                        _iteratorError3 = undefined;
+                        _context.prev = 83;
+                        _iterator3 = tableItems[Symbol.iterator]();
 
-                    case 39:
-                        if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
-                            _context.next = 47;
+                    case 85:
+                        if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
+                            _context.next = 93;
                             break;
                         }
 
-                        tableItemData = _step2.value;
+                        tableItemData = _step3.value;
 
                         // Create a Table Item node based on the API response
                         tableItemNode = ItemNode(tableItemData, {
@@ -198,105 +272,105 @@ exports.sourceNodes = function () {
 
                         // Pass it to Gatsby to create a node
 
-                        _context.next = 44;
+                        _context.next = 90;
                         return createNode(tableItemNode);
 
-                    case 44:
+                    case 90:
+                        _iteratorNormalCompletion3 = true;
+                        _context.next = 85;
+                        break;
+
+                    case 93:
+                        _context.next = 99;
+                        break;
+
+                    case 95:
+                        _context.prev = 95;
+                        _context.t2 = _context['catch'](83);
+                        _didIteratorError3 = true;
+                        _iteratorError3 = _context.t2;
+
+                    case 99:
+                        _context.prev = 99;
+                        _context.prev = 100;
+
+                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                            _iterator3.return();
+                        }
+
+                    case 102:
+                        _context.prev = 102;
+
+                        if (!_didIteratorError3) {
+                            _context.next = 105;
+                            break;
+                        }
+
+                        throw _iteratorError3;
+
+                    case 105:
+                        return _context.finish(102);
+
+                    case 106:
+                        return _context.finish(99);
+
+                    case 107:
+                        console.log('gatsby-source-directus'.blue, 'success'.green, 'Directus' + name + ' node generated');
+                        _context.next = 111;
+                        break;
+
+                    case 110:
+                        console.log('gatsby-source-directus'.blue, 'warning'.yellow, tableData.name + ' table has no rows. Skipping...');
+
+                    case 111:
                         _iteratorNormalCompletion2 = true;
-                        _context.next = 39;
+                        _context.next = 67;
                         break;
 
-                    case 47:
-                        _context.next = 53;
+                    case 114:
+                        _context.next = 120;
                         break;
 
-                    case 49:
-                        _context.prev = 49;
-                        _context.t0 = _context['catch'](37);
+                    case 116:
+                        _context.prev = 116;
+                        _context.t3 = _context['catch'](65);
                         _didIteratorError2 = true;
-                        _iteratorError2 = _context.t0;
+                        _iteratorError2 = _context.t3;
 
-                    case 53:
-                        _context.prev = 53;
-                        _context.prev = 54;
+                    case 120:
+                        _context.prev = 120;
+                        _context.prev = 121;
 
                         if (!_iteratorNormalCompletion2 && _iterator2.return) {
                             _iterator2.return();
                         }
 
-                    case 56:
-                        _context.prev = 56;
+                    case 123:
+                        _context.prev = 123;
 
                         if (!_didIteratorError2) {
-                            _context.next = 59;
+                            _context.next = 126;
                             break;
                         }
 
                         throw _iteratorError2;
 
-                    case 59:
-                        return _context.finish(56);
+                    case 126:
+                        return _context.finish(123);
 
-                    case 60:
-                        return _context.finish(53);
+                    case 127:
+                        return _context.finish(120);
 
-                    case 61:
-                        console.log('gatsby-source-directus'.blue, 'success'.green, 'Directus' + name + ' node generated');
-                        _context.next = 65;
-                        break;
-
-                    case 64:
-                        console.log('gatsby-source-directus'.blue, 'warning'.yellow, tableData.name + ' table has no rows. Skipping...');
-
-                    case 65:
-                        _iteratorNormalCompletion = true;
-                        _context.next = 21;
-                        break;
-
-                    case 68:
-                        _context.next = 74;
-                        break;
-
-                    case 70:
-                        _context.prev = 70;
-                        _context.t1 = _context['catch'](19);
-                        _didIteratorError = true;
-                        _iteratorError = _context.t1;
-
-                    case 74:
-                        _context.prev = 74;
-                        _context.prev = 75;
-
-                        if (!_iteratorNormalCompletion && _iterator.return) {
-                            _iterator.return();
-                        }
-
-                    case 77:
-                        _context.prev = 77;
-
-                        if (!_didIteratorError) {
-                            _context.next = 80;
-                            break;
-                        }
-
-                        throw _iteratorError;
-
-                    case 80:
-                        return _context.finish(77);
-
-                    case 81:
-                        return _context.finish(74);
-
-                    case 82:
+                    case 128:
 
                         console.log("AFTER");
 
-                    case 83:
+                    case 129:
                     case 'end':
                         return _context.stop();
                 }
             }
-        }, _callee, undefined, [[19, 70, 74, 82], [37, 49, 53, 61], [54,, 56, 60], [75,, 77, 81]]);
+        }, _callee, undefined, [[21, 44, 48, 56], [27, 33], [49,, 51, 55], [65, 116, 120, 128], [83, 95, 99, 107], [100,, 102, 106], [121,, 123, 127]]);
     }));
 
     return function (_x, _x2) {

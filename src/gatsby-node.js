@@ -12,7 +12,7 @@ let _requestParams = {
 let _fileRequestParams = {}
 let _auth = {}
 
-exports.sourceNodes = async ({ boundActionCreators, getNode, store, cache, createNodeId }, {
+exports.sourceNodes = async ({ actions, getNode, store, cache, createNodeId }, {
     url,
     protocol,
     apiKey,
@@ -22,7 +22,7 @@ exports.sourceNodes = async ({ boundActionCreators, getNode, store, cache, creat
     fileRequestParams,
     auth,
 }) => {
-    const { createNode } = boundActionCreators;
+    const { createNode } = actions;
 
     protocol = protocol !== undefined && protocol !== '' ? protocol : 'http';
     protocol = protocol + "://";
@@ -67,7 +67,7 @@ exports.sourceNodes = async ({ boundActionCreators, getNode, store, cache, creat
 
         try {
             localFileNode = await createRemoteFileNode({
-            url: protocol + url + fileNode.url,
+            url: encodeURI(`https:${fileNode.url}`),
             store,
             cache,
             createNode,
